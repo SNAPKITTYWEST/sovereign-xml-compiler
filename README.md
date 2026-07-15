@@ -1,3 +1,5 @@
+![License](https://img.shields.io/badge/license-Sovereign%20Source%20v1.0-blueviolet?style=for-the-badge)
+
 # Sovereign XML Compiler
 
 **Natural language → valid XML system prompts in one shot. Zero correction iterations.**
