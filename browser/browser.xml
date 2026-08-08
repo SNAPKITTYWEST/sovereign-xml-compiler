@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<browser title="Sovereign XML Browser">
+    <page id="home" title="Home">
+        <heading>Constraint Browser</heading>
+        <text>This page was generated from XML and transformed by XSLT.</text>
+        <link target="about">About</link>
+    </page>
+    <page id="about" title="About">
+        <heading>About</heading>
+        <text>XML is the source representation. XSLT is the transformation layer. The browser renders the resulting document.</text>
+        <link target="home">Back</link>
+    </page>
+</browser>

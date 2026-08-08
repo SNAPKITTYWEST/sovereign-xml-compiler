@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; frame-src blob:;"/>
+  <title>Sovereign XML Browser</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #07071a;
+      color: #e2e8f0;
+      font-family: 'Courier New', Courier, monospace;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #0d0d1a;
+      border-bottom: 1px solid #1e293b;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    header h1 {
+      font-size: 1rem;
+      color: #7dd3fc;
+      letter-spacing: 0.04em;
+    }
+
+    #status {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-left: auto;
+    }
+
+    #status.error {
+      color: #f87171;
+    }
+
+    #status.ok {
+      color: #4ade80;
+    }
+
+    #container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    iframe#output {
+      flex: 1;
+      border: none;
+      width: 100%;
+      background: #0d0d1a;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sovereign XML Browser</h1>
+    <span id="status">Loading...</span>
+  </header>
+  <div id="container">
+    <iframe id="output" sandbox="allow-same-origin" title="Rendered XML document"></iframe>
+  </div>
+
+  <script>
+    (async function () {
+      const status = document.getElementById('status');
+      const iframe = document.getElementById('output');
+
+      try {
+        // Fetch XML and XSL sources
+        const [xmlResp, xslResp] = await Promise.all([
+          fetch('browser.xml'),
+          fetch('browser.xsl')
+        ]);
+
+        if (!xmlResp.ok) throw new Error('Failed to fetch browser.xml: ' + xmlResp.status);
+        if (!xslResp.ok) throw new Error('Failed to fetch browser.xsl: ' + xslResp.status);
+
+        const [xmlText, xslText] = await Promise.all([
+          xmlResp.text(),
+          xslResp.text()
+        ]);
+
+        // Parse XML and XSL
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+        const xslDoc = parser.parseFromString(xslText, 'application/xml');
+
+        // Check for parse errors
+        const xmlErr = xmlDoc.querySelector('parsererror');
+        const xslErr = xslDoc.querySelector('parsererror');
+        if (xmlErr) throw new Error('XML parse error: ' + xmlErr.textContent.trim());
+        if (xslErr) throw new Error('XSL parse error: ' + xslErr.textContent.trim());
+
+        // Transform
+        const processor = new XSLTProcessor();
+        processor.importStylesheet(xslDoc);
+        const resultDoc = processor.transformToDocument(xmlDoc);
+
+        // Serialize result to string
+        const serializer = new XMLSerializer();
+        const resultHtml = serializer.serializeToString(resultDoc);
+
+        // Render in sandboxed iframe via blob URL
+        const blob = new Blob([resultHtml], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        iframe.src = url;
+
+        status.textContent = 'Transform OK';
+        status.className = 'ok';
+      } catch (err) {
+        status.textContent = 'Error: ' + err.message;
+        status.className = 'error';
+        console.error(err);
+      }
+    })();
+  </script>
+</body>
+</html>

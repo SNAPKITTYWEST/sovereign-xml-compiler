@@ -1,0 +1,6 @@
+<scene width="800" height="600">
+    <rect x="50" y="50" width="300" height="150" rx="20" fill="none" stroke="black" stroke-width="3"/>
+    <circle cx="200" cy="125" r="40" fill="blue"/>
+    <line x1="50" y1="300" x2="500" y2="300" stroke="black" stroke-width="4"/>
+    <text x="50" y="400" font-size="32" fill="black">ConstraintGraph</text>
+</scene>

@@ -1,0 +1,15 @@
+<graph>
+    <node id="input" type="Input"/>
+    <node id="memory" type="Memory"/>
+    <node id="retrieval" type="Retrieval"/>
+    <node id="transform" type="Transform"/>
+    <node id="constraint" type="Constraint"/>
+    <node id="proof" type="Proof"/>
+    <node id="output" type="Output"/>
+    <edge from="input" to="memory"/>
+    <edge from="memory" to="retrieval"/>
+    <edge from="retrieval" to="transform"/>
+    <edge from="transform" to="constraint"/>
+    <edge from="constraint" to="proof"/>
+    <edge from="proof" to="output"/>
+</graph>

@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "sovereign-xml-compiler"
+version = "1.0.0"
+description = "XML → SVG compiler and constraint graph pipeline. No dependencies — pure Python stdlib."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Ahmad Ali Parr", email = "ahmedparr93@gmail.com"},
+    {name = "SnapKitty", email = "collectivekitty.com"},
+]
+keywords = ["xml", "svg", "compiler", "constraint-graph", "xslt"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing :: Markup :: XML",
+    "Topic :: Multimedia :: Graphics",
+]
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+xml2svg = "xml2svg:_cli"
+constraint-graph = "constraint_graph_svg:_cli"
+
+[project.urls]
+Homepage = "https://github.com/SNAPKITTYWEST/sovereign-xml-compiler"
+Repository = "https://github.com/SNAPKITTYWEST/sovereign-xml-compiler"
+Issues = "https://github.com/SNAPKITTYWEST/sovereign-xml-compiler/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["xml2svg*", "constraint_graph_svg*"]
